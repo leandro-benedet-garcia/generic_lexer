@@ -1,0 +1,23 @@
+<?xml version="1.1" encoding="UTF-8"?>
+
+<language name="python">
+    <block>
+        <open>:\n</open>
+        <close />
+        <tab-delimitator>true</tab-delimitator>
+    </block>
+    <comment>
+        <single-line>#</single-line>
+        <block start="&quot;&quot;&quot;" end="&quot;&quot;&quot;" />
+    </comment>
+    <function keyword="def" />
+    <string allow-multiple-prefix="false">
+        <character>&quot;</character>
+        <prefix name="f-string">f</prefix>
+        <prefix name="unicode">u</prefix>
+        <prefix name="binary">b</prefix>
+    </string>
+    <typing>
+        <separator white-space-before="" white-space-after=" ">:</separator>
+    </typing>
+</language>

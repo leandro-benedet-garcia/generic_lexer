@@ -1,0 +1,53 @@
+namespace:paletter
+    public:Bool is_valid_color(color_code, max_range, min_range? 0: Number)
+        ret min_range < color_code < max_range
+
+    public:meta:ColorBase
+        name:String
+
+        child_declaration
+            ret
+
+        child_before_main
+            this.is_valid(red, green, blue, hex_code)
+
+        public:meta:Bool is_valid(*args: Any[])
+
+
+    public:RGB(ColorBase)
+        !red, !green, !blue: Number
+        !?hex_code:Hex
+
+    public:Color
+        !color_name:String
+        !color_type, color:Bytes
+
+NamespaceDef(
+    name="paletter",
+    public_body=[
+        FunctionDef(
+            name="is_valid_color",
+            attrs=[
+                VariableDef(
+                    name="color_code",
+                    var_type=Number,
+                    default_value=null
+                ),
+                VariableDef(
+                    name="max_range",
+                    var_type=Number,
+                    default_value=null
+                ),
+                VariableDef(
+                    name="min_range",
+                    var_type=Number,
+                    default_value=0
+                ),
+            ]
+            body=[
+                Return()
+            ]
+        ),
+    ],
+    private_body=[]
+)
