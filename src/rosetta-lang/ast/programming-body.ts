@@ -29,7 +29,7 @@ export default class ProgrammingBody {
         return ProgrammingBody._instance;
     }
 
-    public getKeyword(name: string): Keyword | boolean {
+    public getKeyword(name: string): Keyword | false {
         let returnedValue: undefined | Keyword = ProgrammingBody.instance.keywords[name];
         if(!returnedValue){
             return false;
@@ -37,11 +37,10 @@ export default class ProgrammingBody {
         return returnedValue;
     }
 
-    public setKeyword(name: string, scope: Scope, action?: Function): void {
-        this.keywords[name] = {
-            "name": name,
-            "scope": scope,
-            "action": action
-        }
+    public setKeyword(name: string, scope: Scope, action?: Function): Keyword {
+        let created_keyword: Keyword = new Keyword(name, scope, action);
+
+        this.keywords[name] = created_keyword;
+        return created_keyword;
     }
 }
