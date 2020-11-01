@@ -17,11 +17,7 @@ export default class ProgrammingBody {
         this.defaultRegex["typePrefix"] = /:/;
 
         this.setKeyword("public", Scope.Global, function(parseObject: Parser){
-                parseObject.whatToFind = this.defaultRegex.whiteSpace;
-
-                parseObject.currTrigger = function(){
-
-                }
+                parseObject.expectedSymbol = " ";
         });
     }
 
@@ -34,7 +30,7 @@ export default class ProgrammingBody {
     }
 
     public getKeyword(name: string): Keyword | boolean {
-        let returnedValue: undefined | Keyword = this.keywords.get(name);
+        let returnedValue: undefined | Keyword = ProgrammingBody.instance.keywords[name];
         if(!returnedValue){
             return false;
         }
@@ -42,7 +38,7 @@ export default class ProgrammingBody {
     }
 
     public setKeyword(name: string, scope: Scope, action?: Function): void {
-        this.keywords["name"] = {
+        this.keywords[name] = {
             "name": name,
             "scope": scope,
             "action": action

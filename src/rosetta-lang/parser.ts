@@ -33,30 +33,21 @@ export default class Parser {
     expectedSymbol: string = ":";
     currBody: string = "";
     filePointer: number = -1;
-    whatToFind: RegExp = this.getDefaultRegex("typePrefix");
 
     currTrigger: Function = this.programmingBody.getKeyword;
 
     constructor(inputValue: string) {
-        for (let currChar of inputValue) {
-            this.filePointer += 1;
+        for (this.filePointer = 0; this.filePointer < inputValue.length; this.filePointer++) {
+            const currChar = inputValue[this.filePointer];
 
             if (this.ignoreWhitespace && this.getDefaultRegex("whiteSpace").test(currChar)) {
                 continue;
             }
 
-            if (this.whatToFind.test(currChar)) {
-                let triggered = this.currTrigger(this.currBody);
-                if(triggered){
-
-                }
-
+            if (currChar == this.expectedSymbol) {
+                console.log(`The current body is: ${this.currBody}`);
+                console.log(`The triggered result is : ${this.currTrigger(this.currBody)}`);
                 this.currBody = "";
-            } else if (
-                !this.testRegex("typing", currChar) &&
-                !this.testRegex("commonVariable", currChar)
-            ) {
-                throw `Syntax error char ${currChar} not expected`;
             }
 
             this.currBody += currChar;
