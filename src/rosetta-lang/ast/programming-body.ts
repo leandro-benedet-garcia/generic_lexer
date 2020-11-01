@@ -41,11 +41,7 @@ export default class ProgrammingBody {
         return returnedValue;
     }
 
-    public setKeyword(
-            name: string,
-            scope: Scope,
-            action?: Function,
-        ): void {
+    public setKeyword(name: string, scope: Scope, action?: Function): void {
         this.keywords["name"] = {
             "name": name,
             "scope": scope,
