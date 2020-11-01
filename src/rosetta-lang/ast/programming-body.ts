@@ -1,14 +1,37 @@
-import { Keyword } from "../interfaces/index";
-import { Scope } from "../enums/index";
-import { default as Parser} from "../parser";
+import { default as Parser } from "../parser";
 
 
-export default class ProgrammingBody {
+
+class Action {
+    public readonly name: string;
+    public readonly action: Function;
+    public readonly body: any[];
+
+    constructor(name: string, action?: Function, hasBody?: true) {
+        this.name = name;
+        this.action = action;
+        if (hasBody) {
+            this.body = new Array<any>();
+        }
+    }
+}
+
+
+export class Keyword extends Action {
+    public toString(): string {
+        return `Keyword name: ${this.name}`;
+    }
+}
+
+
+export class ProgrammingBody {
     private static _instance: ProgrammingBody;
 
-    private keywords: Map<string, Keyword> = new Map<string, Keyword>();
+    private keywords = new Map<string, Keyword>();
+    private defaultType = new Map<string, any>();
 
-    defaultRegex: Map<string, RegExp> = new Map<string, RegExp>();
+    public contexts = new Map<string, Action[]>()
+    public defaultRegex = new Map<string, RegExp>();
 
     private constructor() {
         this.defaultRegex["typing"] = /[A-B][\w\d]+/;
@@ -16,8 +39,11 @@ export default class ProgrammingBody {
         this.defaultRegex["whiteSpace"] = /\n\t /;
         this.defaultRegex["typePrefix"] = /:/;
 
-        this.setKeyword("public", Scope.Global, function(parseObject: Parser){
-                parseObject.expectedSymbol = " ";
+        this.defaultType.set("Bool", Boolean);
+
+        this.setKeyword("public", false, function (parseObject: Parser) {
+            parseObject.expectedSymbol = " ";
+
         });
     }
 
@@ -30,15 +56,15 @@ export default class ProgrammingBody {
     }
 
     public getKeyword(name: string): Keyword | false {
-        let returnedValue: undefined | Keyword = ProgrammingBody.instance.keywords[name];
-        if(!returnedValue){
+        let returnedValue: Keyword = ProgrammingBody.instance.keywords[name];
+        if (!returnedValue) {
             return false;
         }
         return returnedValue;
     }
 
-    public setKeyword(name: string, scope: Scope, action?: Function): Keyword {
-        let created_keyword: Keyword = new Keyword(name, scope, action);
+    public setKeyword(name: string, ...attrs: any[]): Keyword {
+        let created_keyword: Keyword = new Keyword(name, ...attrs);
 
         this.keywords[name] = created_keyword;
         return created_keyword;
