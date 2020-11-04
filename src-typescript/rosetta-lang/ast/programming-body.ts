@@ -1,23 +1,52 @@
 import { default as Parser } from "../parser";
 
+type ValidJSON = string | number | boolean;
 
+class Node {
+    attrs: Map<string, ValidJSON>;
+    body: Node[];
 
-class Action {
     public readonly name: string;
-    public readonly action: Function;
-    public readonly body: any[];
 
-    constructor(name: string, action?: Function, hasBody?: true) {
+    constructor(name: string, attrs?) {
         this.name = name;
-        this.action = action;
-        if (hasBody) {
-            this.body = new Array<any>();
+        this.pushAttr(...attrs);
+    }
+
+    get last(): Node {
+        return this.body[this.body.length - 1];
+    }
+
+    pushAttr(...attrs){
+        if (!this.attrs) {
+            this.attrs = new Map<string, ValidJSON>();
         }
+
+
+    }
+
+    push(...toAdd: Node[]): number {
+        if (!this.body) {
+            this.body = [];
+        }
+
+        return this.body.push(...toAdd);
+    }
+
+    createChild(name: string): Node {
+        let createdContext = new Node(name);
+        this.push(createdContext);
+
+        return createdContext;
+    }
+
+    createInnerChild(name: string): Node {
+        return this.last.createChild(name);
     }
 }
 
 
-export class Keyword extends Action {
+export class Keyword extends Node {
     public toString(): string {
         return `Keyword name: ${this.name}`;
     }
@@ -30,7 +59,7 @@ export class ProgrammingBody {
     private keywords = new Map<string, Keyword>();
     private defaultType = new Map<string, any>();
 
-    public contexts = new Map<string, Action[]>()
+    public context = new Node("rosetta");
     public defaultRegex = new Map<string, RegExp>();
 
     private constructor() {
@@ -43,7 +72,9 @@ export class ProgrammingBody {
 
         this.setKeyword("public", false, function (parseObject: Parser) {
             parseObject.expectedSymbol = " ";
-
+            parseObject.currTrigger = function (parseObject: Parser) {
+                parseObject.currBody
+            }
         });
     }
 
@@ -53,6 +84,16 @@ export class ProgrammingBody {
         }
 
         return ProgrammingBody._instance;
+    }
+
+    public get localContext() {
+        return this.context.last();
+    }
+
+    public getType(typeName: string): any {
+        if (typeName in this.localContext) {
+            return this.localContext[typeName];
+        }
     }
 
     public getKeyword(name: string): Keyword | false {

@@ -2,40 +2,17 @@ import { ProgrammingBody } from "./ast/index";
 import { Keyword } from "./ast/programming-body";
 
 
-enum Action {
-    Create,
-    Read,
-    Set,
-    Delete
-}
-
-
-enum ScopeType {
-    Module,
-    Namespace,
-    Class,
-    Function
-}
-
-
-interface Scope {
-    name: string;
-    content: string;
-    scopeType: ScopeType;
-}
-
-
 export default class Parser {
-    allScopes: Scope[];
-
     programmingBody: ProgrammingBody = ProgrammingBody.instance;
 
     ignoreWhitespace: boolean = true;
     expectedSymbol: string = ":";
     currBody: string = "";
+
+    /** @TJS-type integer */
     filePointer: number;
 
-    currTrigger: Function = function(parseObject: Parser): void {
+    currTrigger: Function = function (parseObject: Parser): void {
         let keyResult: Keyword = this.programmingBody.getKeyword(parseObject.currBody);
         this.currTrigger = keyResult.action;
     };
@@ -58,11 +35,11 @@ export default class Parser {
         }
     }
 
-    public getDefaultRegex(regexName: string): RegExp{
+    public getDefaultRegex(regexName: string): RegExp {
         return this.programmingBody.defaultRegex[regexName];
     }
 
-    public testRegex(regexName: string, testValue: string){
+    public testRegex(regexName: string, testValue: string) {
         return this.getDefaultRegex(regexName).test(testValue);
     }
 }

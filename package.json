@@ -3,11 +3,13 @@
     "description": "A programming language made to be converted to others. In the browser.",
     "authors": "Leandro Benedet Garcia <cerberus1746@gmail.com>",
     "version": "0.0.1",
-    "main": "src/rosetta-lang/index.ts",
+    "main": "src-typescript/rosetta-lang/index.ts",
     "type": "module",
     "devDependencies": {
+        "@types/qunit": "^2",
         "clean-webpack-plugin": "^3",
         "html-webpack-plugin": "^4",
+        "qunit": "^2",
         "ts-loader": "^8",
         "webpack": "^4",
         "webpack-cli": "^3",
@@ -22,7 +24,8 @@
     "scripts": {
         "start": "webpack-dev-server --open --config webpack.config.cjs",
         "watch": "webpack --watch --config webpack.config.cjs",
-        "build": "webpack --config webpack.config.cjs"
+        "build": "webpack --config webpack.config.cjs",
+        "test": "qunit"
     },
     "module": "main"
 }

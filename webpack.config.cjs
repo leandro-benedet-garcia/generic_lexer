@@ -9,7 +9,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 module.exports = {
     mode: "development",
     entry: {
-        "errors": path.join(__dirname, "src", "rosetta-lang", "errors", "index.ts"),
+        "errors": path.join(__dirname, "src-typescript", "rosetta-lang", "errors", "index.ts"),
         "ast": path.join(__dirname, "src", "rosetta-lang", "ast", "index.ts"),
         "main": path.join(__dirname, packageJSON.main)
     },
