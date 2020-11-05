@@ -1,4 +1,3 @@
-#%%
 import enum
 import typing
 
@@ -14,14 +13,9 @@ class RosettaBase:
 registered_bases: typing.Dict[str, RosettaBase] = {}
 
 
-def register_base(entrance_class: typing.Type[RosettaBase]) -> typing.Type[RosettaBase]:
-    """
-    Set class as base for the language
-
-    :param entrance_class: Class that inherits from class:`RosettaBase`
-    :raises TypeError: Raised when a class is added without inheriting class:`RosettaBase`
-    :return: The class itself
-    """
+def register_base(
+    entrance_class: typing.Type[RosettaBase], code_representation: string
+) -> typing.Type[RosettaBase]:
     class_name = entrance_class.__name__
     class_mro = entrance_class.__mro__
 
@@ -71,6 +65,6 @@ class RosettaClass(RosettaBody):
     before_child_constructor: typing.Optional[RosettaFunction]
 
 
-@register_base
+@register_base()
 class RosettaNamespace(RosettaBody):
     pass

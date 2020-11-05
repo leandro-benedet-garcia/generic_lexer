@@ -1,4 +1,22 @@
+# Cache
+.pytest_cache/
+__pycache__/
+*.pyc
+
+# Ide
 .vscode/
+
+# Node
 node_modules/
-uml/
 package-lock.json
+
+# Coverage
+htmlcov/
+.coverage
+coverage.xml
+
+# UML
+uml/
+
+# Dist
+dist/
