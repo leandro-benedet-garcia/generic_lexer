@@ -1,36 +1,39 @@
 import enum
 import typing
+import re
 
 
-package_name = "Rosetta"
+language_name = "Rosetta"
 
 
 class RosettaBase:
     name: str
-    owner_body: typing.List["RosettaBody"]
+    owner_body: typing.List[language_name + "Body"]
 
 
-registered_bases: typing.Dict[str, RosettaBase] = {}
+class Bases:
+    def __init__(self):
+        self.registered_bases: typing.Set[RosettaBase] = set()
+        self.base_names: typing.Set[str] = set()
 
 
-def register_base(
-    entrance_class: typing.Type[RosettaBase], code_representation: string
-) -> typing.Type[RosettaBase]:
-    class_name = entrance_class.__name__
-    class_mro = entrance_class.__mro__
+    def register_base(
+        self, entrance_class: typing.Type[RosettaBase], code_representation: str
+    ) -> typing.Type[RosettaBase]:
+        class_name = entrance_class.__name__
+        class_mro = entrance_class.__mro__
 
-    if RosettaBase not in class_mro:
-        raise TypeError(
-            "Class must inherit from RosettaBody or class inherited by it the class "
-            f"{class_name} mro is {class_mro}"
-        )
+        if RosettaBase not in class_mro:
+            raise TypeError(
+                f"Class must inherit from {language_name}Base {class_name} mro is {class_mro}"
+            )
 
-    class_name = class_name.replace(package_name, "")
-    class_name = class_name.lower()
+        class_name = class_name.replace(language_name, "")
+        class_name = class_name.lower()
 
-    registered_bases[class_name] = entrance_class
+        self.registered_bases.append(entrance_class)
 
-    return entrance_class
+        return entrance_class
 
 
 class Access(enum.Enum):

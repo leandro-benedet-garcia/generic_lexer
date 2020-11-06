@@ -3,7 +3,7 @@
     "description": "A programming language made to be converted to others. In the browser.",
     "authors": "Leandro Benedet Garcia <cerberus1746@gmail.com>",
     "version": "0.0.1",
-    "main": "src-typescript/rosetta-lang/index.ts",
+    "main": "src/rosetta-lang/index.ts",
     "type": "module",
     "devDependencies": {
         "@types/qunit": "^2",

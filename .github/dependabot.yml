@@ -1,10 +1,11 @@
 version: 2
+
 updates:
   - package-ecosystem: "npm"
-    directory: "/"
+    directory: "/src-typescript/"
     schedule:
       interval: "daily"
   - package-ecosystem: "pip"
-    directory: "/rosetta-lang/src-python/"
+    directory: "/src-python/"
     schedule:
       interval: "daily"
