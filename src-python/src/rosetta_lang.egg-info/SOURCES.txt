@@ -1,0 +1,11 @@
+README.md
+pyproject.toml
+setup.cfg
+src/rosetta_lang/__init__.py
+src/rosetta_lang/__main__.py
+src/rosetta_lang/__version__.py
+src/rosetta_lang/base_types.py
+src/rosetta_lang.egg-info/PKG-INFO
+src/rosetta_lang.egg-info/SOURCES.txt
+src/rosetta_lang.egg-info/dependency_links.txt
+src/rosetta_lang.egg-info/top_level.txt

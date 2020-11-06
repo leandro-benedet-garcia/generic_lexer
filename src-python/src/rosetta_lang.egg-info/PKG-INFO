@@ -1,0 +1,17 @@
+Metadata-Version: 1.1
+Name: rosetta-lang
+Version: 0.0.1
+Summary: New coding language
+Home-page: UNKNOWN
+Author: UNKNOWN
+Author-email: UNKNOWN
+License: MIT
+Description: ![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)
+        # rosetta-lang
+        **Currently nothing is useable.**
+        
+        New programming language for fun.
+        
+Keywords: programming-language,transpiler
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3

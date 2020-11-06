@@ -1,7 +1,6 @@
-import enum
-import typing
 import re
-
+import typing
+import enum
 
 language_name = "Rosetta"
 
@@ -10,30 +9,25 @@ class RosettaBase:
     name: str
     owner_body: typing.List[language_name + "Body"]
 
+    registered_bases: typing.List[language_name + "Base"] = []
+    base_names: typing.List[str] = []
+    base_regexes: typing.List[re.Pattern] = []
 
-class Bases:
-    def __init__(self):
-        self.registered_bases: typing.Set[RosettaBase] = set()
-        self.base_names: typing.Set[str] = set()
+    def __init_subclass__(cls, *args, code_regex=None, **kwargs):
+        if code_regex:
+            class_name = cls.__name__
 
+            class_name = class_name.replace(language_name, "")
+            class_name = class_name.lower()
 
-    def register_base(
-        self, entrance_class: typing.Type[RosettaBase], code_representation: str
-    ) -> typing.Type[RosettaBase]:
-        class_name = entrance_class.__name__
-        class_mro = entrance_class.__mro__
+            code_regex = code_regex.format(code_name=class_name)
+            code_regex = re.compile(r"^" + code_regex, re.MULTILINE | re.DOTALL)
 
-        if RosettaBase not in class_mro:
-            raise TypeError(
-                f"Class must inherit from {language_name}Base {class_name} mro is {class_mro}"
-            )
+            RosettaBase.base_regexes.append(code_regex)
+            RosettaBase.base_names.append(class_name)
+            RosettaBase.registered_bases.append(cls)
 
-        class_name = class_name.replace(language_name, "")
-        class_name = class_name.lower()
-
-        self.registered_bases.append(entrance_class)
-
-        return entrance_class
+        return super().__init_subclass__(*args, **kwargs)
 
 
 class Access(enum.Enum):
@@ -50,24 +44,20 @@ class RosettaAccess(RosettaBase):
     access: Access
 
 
-@register_base
 class RosettaVariable(RosettaAccess):
     rosetta_type: RosettaBase
     value: typing.Optional[RosettaBase]
 
 
-@register_base
 class RosettaFunction(RosettaBody, RosettaAccess):
     attributes: typing.List[RosettaVariable]
 
 
-@register_base
 class RosettaClass(RosettaBody):
     constructor: typing.Optional[RosettaFunction]
     child_declaration: typing.Optional[RosettaFunction]
     before_child_constructor: typing.Optional[RosettaFunction]
 
 
-@register_base()
-class RosettaNamespace(RosettaBody):
+class RosettaNamespace(RosettaBody, code_regex=r" *{code_name}:(?P<element_name>[a-z]+)"):
     pass

@@ -1,6 +1,7 @@
 # Cache
 .pytest_cache/
 __pycache__/
+.tox/
 *.pyc
 
 # Ide
