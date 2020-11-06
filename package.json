@@ -12,7 +12,7 @@
         "qunit": "^2",
         "ts-loader": "^8",
         "webpack": "^4",
-        "webpack-cli": "^3",
+        "webpack-cli": "^4",
         "webpack-dev-server": "^3"
     },
     "jshintConfig": {
