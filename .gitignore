@@ -1,3 +1,5 @@
+.env
+
 # Cache
 .pytest_cache/
 __pycache__/
@@ -21,3 +23,6 @@ uml/
 
 # Dist
 dist/
+
+# Built Documentation
+src-python/docs/_build/

@@ -1,4 +1,7 @@
-if __name__ == "__main__":
-    from . import base_types
+from .language_parser import parser
 
-    print(base_types.RosettaBase.base_names)
+
+if __name__ == "__main__":
+    import pathlib
+
+    parser.Parser("../../schemas/base_language.roset")
