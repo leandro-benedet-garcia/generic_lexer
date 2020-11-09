@@ -25,4 +25,5 @@ uml/
 dist/
 
 # Built Documentation
-src-python/docs/_build/
+_build/
+rosetta_lang.egg-info/
