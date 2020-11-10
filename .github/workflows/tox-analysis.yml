@@ -1,21 +1,22 @@
 name: "Tox Tests"
 
 on:
-  push:
-    branches: 
-    - master
-  pull_request:
-    branches:
-    - master
+  - push
+  - pull_request
 
 jobs:
-  analyze:
+  tox-tests:
+    runs-on: ${{ matrix.platform }}
     name: Analyze
-    runs-on: ubuntu-18.04
 
     strategy:
       max-parallel: 5
       matrix:
+        platform:
+        - ubuntu-latest
+        - macos-latest
+        - windows-latest
+        
         python-version: 
         #- 2.7
         #- 3.6
@@ -39,8 +40,15 @@ jobs:
     
     - name: Test with tox
       run: tox
-
-    - name: Coveralls GitHub Action
-      uses: coverallsapp/github-action@v1.1.2
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+      env:
+        PLATFORM: ${{ matrix.platform }}
+  
+  finish:
+    needs: tox-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@v1.1.0
+        with:
+          github-token: ${{ secrets.github_token }}
+          parallel-finished: true
