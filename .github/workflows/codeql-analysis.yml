@@ -14,29 +14,12 @@ jobs:
     strategy:
       max-parallel: 5
       matrix:
-        python-version: 
-        #- 2.7
-        #- 3.6
-        #- 3.7
-        #- 3.8
-        - 3.9
+        language:
+        - python
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install tox tox-gh-actions
-    
-    - name: Test with tox
-      run: tox
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
@@ -48,6 +31,3 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
-
-    - name: Coveralls GitHub Action
-      uses: coverallsapp/github-action@v1
