@@ -50,6 +50,7 @@ jobs:
     name: Finish Coveralls
     needs: tox-tests
     runs-on: ubuntu-latest
+    container: python:3-slim
     steps:
     - name: Finished
       run: |
