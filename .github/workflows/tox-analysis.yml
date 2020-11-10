@@ -1,4 +1,4 @@
-name: "Tox Tests"
+name: Tox Tests
 
 on:
   - push
@@ -6,7 +6,7 @@ on:
 
 jobs:
   tox-tests:
-    runs-on: ${{ matrix.platform }}
+    runs-on: ${{matrix.platform}}
     name: Analyze
 
     strategy:
@@ -26,29 +26,38 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@master
 
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@master
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: ${{matrix.python-version}}
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install tox tox-gh-actions
-    
+
     - name: Test with tox
       run: tox
       env:
-        PLATFORM: ${{ matrix.platform }}
+        PLATFORM: ${{matrix.platform}}
+
+    - name: Test ${{ matrix.test_number }}
+      run: make test-coverage-${{ matrix.test_number }}
+    - name: Coveralls Parallel
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{secrets.github_token}}
+        flag-name: run-${{matrix.test_number}}
+        parallel: true
   
   finish:
     needs: tox-tests
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls Finished
-        uses: coverallsapp/github-action@v1.1.0
+        uses: coverallsapp/github-action@master
         with:
-          github-token: ${{ secrets.github_token }}
+          github-token: ${{secrets.github_token}}
           parallel-finished: true
