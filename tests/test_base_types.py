@@ -1,5 +1,4 @@
 from rosetta_lang import base_types
-import sys
 import logging
 
 
@@ -11,4 +10,4 @@ def test_simple():
     """
     just to find a test
     """
-    assert "namespace" in base_types.RosettaBase.base_names
+    assert "namespace" in base_types.RosettaBase._base_names
