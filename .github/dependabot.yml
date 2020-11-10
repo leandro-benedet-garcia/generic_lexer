@@ -1,11 +1,7 @@
 version: 2
 
 updates:
-  - package-ecosystem: "npm"
-    directory: "/src-typescript/"
-    schedule:
-      interval: "daily"
   - package-ecosystem: "pip"
-    directory: "/src-python/"
+    directory: ".."
     schedule:
       interval: "daily"

@@ -9,10 +9,6 @@ __pycache__/
 # Ide
 .vscode/
 
-# Node
-node_modules/
-package-lock.json
-
 # Coverage
 htmlcov/
 .coverage
@@ -20,9 +16,6 @@ coverage.xml
 
 # UML
 uml/
-
-# Dist
-dist/
 
 # Built Documentation
 _build/
