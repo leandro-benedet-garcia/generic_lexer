@@ -1,0 +1,8 @@
+pyproject.toml
+setup.cfg
+src/simple_parser/__init__.py
+src/simple_parser.egg-info/PKG-INFO
+src/simple_parser.egg-info/SOURCES.txt
+src/simple_parser.egg-info/dependency_links.txt
+src/simple_parser.egg-info/top_level.txt
+src/simple_parser.egg-info/zip-safe

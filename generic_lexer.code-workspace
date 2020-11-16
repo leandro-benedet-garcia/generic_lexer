@@ -1,0 +1,52 @@
+{
+    "folders": [
+        {
+            "path": ".",
+            "name": "generic_lexer"
+        }
+    ],
+    "launch": {
+        "configurations": [
+            {
+                "name": "Python: Run Current File",
+                "type": "python",
+                "request": "launch",
+                "program": "${file}"
+            }
+        ],
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "options": {
+                    "cwd": "${workspaceFolder}/src"
+                },
+                "presentation": {
+                    "reveal": "always",
+                    "panel": "new"
+                },
+                "label": "Run tox",
+                "type": "shell",
+                "command": "tox",
+                "group": "test"
+            }
+        ]
+    },
+    "settings": {
+        "python.pythonPath": "d:\\Projetos\\generic_lexer\\.venv\\Scripts\\python.exe",
+        "restructuredtext.confPath": "${workspaceFolder}\\docs",
+        "python.analysis.extraPaths": [
+            "${workspaceFolder}/src"
+        ],
+        "files.exclude": {
+            "**/.egg-info": true,
+            "**/.mypy_cache": true,
+            "**/.pytest_cache": true,
+            "**/.tox": true,
+            "**/.venv": true
+        },
+        "autoDocstring.docstringFormat": "sphinx",
+        "python.linting.mypyEnabled": true
+    }
+}

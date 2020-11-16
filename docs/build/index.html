@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Generic Lexer &#8212; generic_lexer  documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">generic_lexer  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Generic Lexer</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-generic_lexer"></span><div class="section" id="generic-lexer">
+<h1>Generic Lexer<a class="headerlink" href="#generic-lexer" title="Permalink to this headline">¶</a></h1>
+<a class="reference external image-reference" href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a>
+<p>A generic _lexer_pattern-based Lexer/tokenizer tool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Example</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p>If we try to execute the following code:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">rules</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s2">&quot;VARIABLE&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;[a-z]+&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;NUMBER&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;\d+&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;EQUALS&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;=&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;SPACE&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot; &quot;</span><span class="p">,</span>
+  <span class="s2">&quot;NEWLINE&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;\n&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;STRING&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">(?P&lt;string_content&gt;.*)</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">hello = &quot;world&quot;</span>
+<span class="s2">test = 10&quot;&quot;&quot;</span>
+
+<span class="k">for</span> <span class="n">curr_token</span> <span class="ow">in</span> <span class="n">Lexer</span><span class="p">(</span><span class="n">rules</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+   <span class="nb">print</span><span class="p">(</span><span class="n">curr_token</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Will give us the following output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>VARIABLE(hello) at 0
+SPACE( ) at 5
+EQUALS(=) at 6
+SPACE( ) at 7
+STRING(&quot;world&quot;) at 8
+NEWLINE(\n) at 15
+VARIABLE(test) at 16
+SPACE( ) at 20
+EQUALS(=) at 21
+SPACE( ) at 22
+NUMBER(10) at 23
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">License</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<a class="reference external image-reference" href="http://creativecommons.org/publicdomain/mark/1.0/"><img alt="Public Domain Mark" src="https://licensebuttons.net/p/mark/1.0/80x15.png" /></a>
+<dl class="py class">
+<dt id="generic_lexer.Lexer">
+<em class="property">class </em><code class="sig-prename descclassname">generic_lexer.</code><code class="sig-name descname">Lexer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rules</span></em>, <em class="sig-param"><span class="n">skip_whitespace</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">text_buffer</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#generic_lexer.Lexer" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simple pattern-based lexer/tokenizer.</p>
+<p>All the regexes are concatenated into a single one with named groups. Since the group names
+must be valid Python identifiers, but the token types used by the user are arbitrary
+strings, we auto-generate the group names and map them to token types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rules</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Pattern</span></code>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Pattern</span></code>]]]) – A list of rules. Each rule is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">re.Pattern</span></code> pair, where
+<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> is the type of the token to return when it’s recognized and
+<code class="xref py py-class docutils literal notranslate"><span class="pre">re.Pattern</span></code> is the regular expression used to recognize the token.</p></li>
+<li><p><strong>skip_whitespace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If True, whitespace (s+) will be skipped and not reported by the
+lexer. Otherwise, you have to specify your rules for whitespace, or it will be flagged
+as an error.</p></li>
+<li><p><strong>text_buffer</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – the string to generate the tokens from</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="generic_lexer.Lexer.tokens">
+<code class="sig-name descname">tokens</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skip_whitespace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#generic_lexer.Lexer.tokens" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>skip_whitespace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – just like <code class="xref py py-attr docutils literal notranslate"><span class="pre">Lexer.skip_whitespace</span></code> passed trough
+<a class="reference internal" href="#generic_lexer.Lexer" title="generic_lexer.Lexer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Lexer</span></code></a> for the current method call.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#generic_lexer.LexerError" title="generic_lexer.LexerError"><strong>LexerError</strong></a> – raised with the position and character of the error in case
+of a lexing error (if the current chunk of the buffer matches no rule).</p>
+</dd>
+<dt class="field-odd">Yields</dt>
+<dd class="field-odd"><p>the next token (a Token object) found in the <code class="xref py py-attr docutils literal notranslate"><span class="pre">Lexer.text_buffer</span></code>.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterator" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code></a>[<a class="reference internal" href="#generic_lexer.Token" title="generic_lexer.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt id="generic_lexer.LexerError">
+<em class="property">exception </em><code class="sig-prename descclassname">generic_lexer.</code><code class="sig-name descname">LexerError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">text_buffer_pointer</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">char</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#generic_lexer.LexerError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lexer error exception.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – the error message, you can use <cite>{text_buffer_pointer}</cite> or/and <cite>{char}</cite> in the
+string so the attribute are formated trough <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str.format" title="(in Python v3.9)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">str.format()</span></code></a></p></li>
+<li><p><strong>text_buffer_pointer</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – position in the input_buf line where the error occurred.</p></li>
+<li><p><strong>char</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – the character that triggered the error</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="generic_lexer.Token">
+<em class="property">class </em><code class="sig-prename descclassname">generic_lexer.</code><code class="sig-name descname">Token</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">val</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">position</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#generic_lexer.Token" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simple Token structure. Contains the token name, value and position.</p>
+<dl class="py attribute">
+<dt id="generic_lexer.Token.name">
+<code class="sig-name descname">name</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#generic_lexer.Token.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>the name of the token</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="generic_lexer.Token.position">
+<code class="sig-name descname">position</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></em><a class="headerlink" href="#generic_lexer.Token.position" title="Permalink to this definition">¶</a></dt>
+<dd><p>the position the token was found in the text buffer</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="generic_lexer.Token.val">
+<code class="sig-name descname">val</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><a class="headerlink" href="#generic_lexer.Token.val" title="Permalink to this definition">¶</a></dt>
+<dd><p>token’s value</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="toctree-wrapper compound">
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">generic_lexer  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Generic Lexer</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright .
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.3.0.
+    </div>
+  </body>
+</html>

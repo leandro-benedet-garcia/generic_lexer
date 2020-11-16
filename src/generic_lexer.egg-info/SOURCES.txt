@@ -1,0 +1,10 @@
+pyproject.toml
+setup.cfg
+setup.py
+src/generic_lexer/__init__.py
+src/generic_lexer.egg-info/PKG-INFO
+src/generic_lexer.egg-info/SOURCES.txt
+src/generic_lexer.egg-info/dependency_links.txt
+src/generic_lexer.egg-info/requires.txt
+src/generic_lexer.egg-info/top_level.txt
+src/generic_lexer.egg-info/zip-safe
