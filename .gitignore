@@ -1,6 +1,8 @@
-/.mypy_cache
-/.tox
-/.venv
-/.vscode
-/Pipfile.lock
-/simple_parser.egg-info
+docs/build
+__pycache__
+.mypy_cache
+.tox
+.venv
+.vscode
+Pipfile.lock
+simple_parser.egg-info
