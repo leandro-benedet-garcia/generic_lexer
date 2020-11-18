@@ -10,6 +10,11 @@ Generic Lexer
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
     :alt: Code style: black
+.. image:: https://img.shields.io/badge/license-Unlicense-blue.svg
+    :target: http://unlicense.org/
+    :alt: License: Unlicense
+.. image:: https://img.shields.io/github/workflow/status/cerberus1746/generic_lexer/tox-suite.yml
+    :alt: GitHub Workflow Status
 
 {__description__}
 
@@ -19,10 +24,6 @@ The minimun python version is 3.6
 :Maintainer: {__maintainer__}
 :Author: {__author__}
 :License: {__license__}
-
-.. image:: https://licensebuttons.net/p/mark/1.0/80x15.png
-    :target: http://creativecommons.org/publicdomain/mark/1.0/
-    :alt: Public Domain Mark
 
 :Example:
 
@@ -183,7 +184,7 @@ class Lexer:
 
     def __init__(
         self,
-        rules: Union[Dict[str, str], Iterable[Tuple[str, str]]],
+        rules: Union[Dict[str, PatternType], Iterable[Tuple[str, PatternType]]],
         skip_whitespace: bool = False,
         text_buffer: str = "",
     ):

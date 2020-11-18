@@ -27,13 +27,14 @@
             {
                 "label": "Generate Sphinx Documentation",
                 "type": "shell",
-                "command": "python -m sphinx -d docs/cache -b html docs docs/output",
-                "group": "build"
+                "command": "python -m sphinx -d docs/cache -b html docs docs/build",
+                "group": "build",
+                "problemMatcher": []
             },
             {
                 "label": "Run Sphinx Doctest",
                 "type": "shell",
-                "command": "python -m sphinx -d docs/cache -b doctest docs docs/output",
+                "command": "python -m sphinx -d docs/cache -b doctest docs docs/build",
                 "group": "test",
                 "problemMatcher": {
                     "owner": "python",
@@ -44,12 +45,9 @@
                             "file": 1,
                             "line": 2
                         },
-                        /*{
-                            "regexp": "^.*raise.*$"
-                        },*/
                         {
                             "regexp": "^\\s*(.*)\\s*$",
-                            "code": 1,
+                            "code": 1
                         }
                     ]
                 }
