@@ -4,8 +4,6 @@ on:
   - push
   - pull_request
 
-env:
-  NOT_PYPY_AND_WINDOWS: ${{ !contains(matrix.platform, "windows") && matrix.python-version != "pypy3" }}
 
 jobs:
   build:
@@ -15,6 +13,9 @@ jobs:
         platform: [ubuntu-latest, macos-latest, windows-latest]
         python-version: [3.6, 3.7, 3.8, 3.9, pypy3]
 
+    env:
+      NOT_PYPY_AND_WINDOWS: ${{ !contains(matrix.platform, "windows") && matrix.python-version != "pypy3" }}
+      
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python ${{ matrix.python-version }}
