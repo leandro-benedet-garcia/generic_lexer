@@ -46,8 +46,8 @@ jobs:
           PLATFORM: ${{ matrix.platform }}
 
       - uses: actions/upload-artifact@v2
-        name: coverage-data
         with:
+          name: coverage-data
           path: .coverage/
 
   coverage:
