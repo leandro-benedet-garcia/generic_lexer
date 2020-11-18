@@ -37,6 +37,12 @@ jobs:
         pip install tox tox-gh-actions
 
     - name: Test with tox
+      run: tox  --notest --workdir "~/.tox"
+      if: steps.cache-primes.outputs.cache-hit != 'true'
+      env:
+        PLATFORM: ${{ matrix.platform }}
+
+    - name: Test with tox
       run: tox --workdir "~/.tox"
       env:
         PLATFORM: ${{ matrix.platform }}
