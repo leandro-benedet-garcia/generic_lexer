@@ -4,7 +4,6 @@ on:
   - push
   - pull_request
 
-
 jobs:
   build:
     runs-on: ${{ matrix.platform }}
@@ -26,8 +25,9 @@ jobs:
 
     - name: Cache Tox
       uses: actions/cache@v2
+      id: cache-tox
       with:
-        path: ~/.tox
+        path: .tox
         key: ${{ runner.os }}-${{ hashFiles('**/tox.ini') }}
         restore-keys: ${{ runner.os }}-
 
@@ -36,13 +36,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install tox tox-gh-actions
 
-    - name: Test with tox
-      run: tox  --notest --workdir "~/.tox"
-      if: steps.cache-primes.outputs.cache-hit != 'true'
+    - name: Create Tox Enviroment
+      run: tox  --notest --workdir ".tox"
+      if: steps.cache-tox.outputs.cache-hit != 'true'
       env:
         PLATFORM: ${{ matrix.platform }}
 
     - name: Test with tox
-      run: tox --workdir "~/.tox"
+      run: tox --workdir ".tox"
       env:
         PLATFORM: ${{ matrix.platform }}
