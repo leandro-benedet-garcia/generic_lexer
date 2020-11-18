@@ -6,92 +6,105 @@ Generic Lexer
     :target: https://github.com/psf/black
     :alt: Code style: black
 
-A generic _lexer_pattern-based Lexer/tokenizer tool.
+{__description__}
 
-:Example:
+The minimun python version is 3.6
 
-.. testsetup:: *
-
-    from generic_lexer import Lexer
-
-If we try to execute the following code:
-
-.. testcode::
-
-    rules = {
-        "VARIABLE": r"(?P<var_name>[a-z_]+): (?P<var_type>[A-Z]\w+)",
-        "NUMBER": r"\d+",
-        "EQUALS": r"=",
-        "SPACE": r" ",
-        "NEWLINE": r"\\n",
-        "STRING": r"\\".*\\"",
-    }
-
-    data = "first_word: String = \\"Hello\\""
-
-    data = data.strip()
-
-    for curr_token in Lexer(rules, True, data):
-        print(curr_token)
-
-Will give us the following output:
-
-.. testoutput::
-
-    VARIABLE({'var_name': 'first_word', 'var_type': 'String'}) at 0
-    EQUALS({'GROUP1': '='}) at 19
-    STRING({'GROUP4': '"Hello"'}) at 21
-
-:License:
+:Version: {__version__}
+:Maintainer: {__maintainer__}
+:Author: {__author__}
+:License: {__license__}
 
 .. image:: https://licensebuttons.net/p/mark/1.0/80x15.png
     :target: http://creativecommons.org/publicdomain/mark/1.0/
     :alt: Public Domain Mark
+
+:Example:
+
+If we try to execute the following code:
+
+.. testcode:: module_sample
+
+    from generic_lexer import Lexer
+
+    rules = {{
+        "VARIABLE": r"(?P<var_name>[a-z_]+): (?P<var_type>[A-Z]\w+)",
+        "EQUALS": r"=",
+        "SPACE": r" ",
+        "STRING": r"\\".*\\"",
+    }}
+
+    data = "first_word: String = \\"Hello\\""
+    data = data.strip()
+    for curr_token in Lexer(rules, False, data):
+        print(curr_token)
+
+Will give us the following output:
+
+.. testoutput:: module_sample
+
+    VARIABLE({{'var_name': 'first_word', 'var_type': 'String'}}) at 0
+    SPACE( ) at 18
+    EQUALS(=) at 19
+    SPACE( ) at 20
+    STRING("Hello") at 21
 """
-
-__version__ = "2.0.0"
-__license__ = "Public Domain"
-__maintainer__ = "Leandro Benedet Garcia <cerberus1746@gmail.com>"
-__description__ = "Simple python lexer"
-__authors__ = [
-    "Eli Bendersky <eliben@gmail.com>",
-    "Leandro Benedet Garcia <cerberus1746@gmail.com>",
-]
-
 import re
 import sys
-from typing import Dict, Iterable, Iterator, List, NamedTuple, Optional, Set, Tuple, Union
+from typing import Dict, Iterable, Iterator, Set, Tuple, Union
 
 
-if sys.version_info < (3, 6):
+__version__ = "1.1.0"
+__license__ = "MIT"
+__author__ = "Eli Bendersky <eliben@gmail.com>"
+__maintainer__ = "Leandro Benedet Garcia <cerberus1746@gmail.com>"
+__description__ = "A generic pattern-based Lexer/tokenizer tool."
+__url__ = "https://github.com/Cerberus1746/generic_lexer/"
+__min_python_version__ = (3, 6)
+
+
+if "sphinx" in sys.modules:  # pragma: no cover
+    __doc__ = __doc__.format(**globals())
+
+if sys.version_info < __min_python_version__:  # pragma: no cover
     sys.exit(
         f"The package does not support the current python version ({sys.version}) "
-        "you must use Python 3.6 or above"
+        f"you must use Python {__min_python_version__} or above"
     )
 elif sys.version_info < (3, 7):
-    PatternType = str  # Python 3.6 doesn't have re.Pattern, so we use str instead as a type
+    # Python versions under 3.7 doesn't have Pattern or Match, so we use str instead as a type
+    PatternType = str
+    MatchPattern = str
 else:
     PatternType = re.Pattern
+    MatchPattern = re.Match
 
 
-class Token(NamedTuple):
+class Token:
     """
     A simple Token structure. Contains the token name, value and position.
+
+    :param name: the name of the token
+    :param position: the position the token was found in the text buffer
+    :param val: token's value
     """
 
-    name: str
-    "the name of the token"
+    __slots__ = ("_val", "name", "position")
 
-    position: int
-    "the position the token was found in the text buffer"
+    def __init__(self, name, position, val):
+        self.name: str = name
+        self._val: Dict[str, str] = val
+        self.position: int = position
 
-    val: Dict[str, str]
-    "token's value"
+    @property
+    def val(self) -> Union[Dict[str, str], str]:
+        if len(self._val) == 1:
+            return next(iter(self._val.values()))
+
+        return self._val
 
     def __str__(self):
-        out_str = f"{self.name}({self.val}) at {self.position}"
-
-        return out_str
+        return f"{self.name}({self.val}) at {self.position}"
 
 
 class LexerError(Exception):
@@ -118,7 +131,7 @@ class LexerError(Exception):
             )
 
         if self.text_buffer_pointer > 0 and self.char:
-            return(
+            return (
                 f"The char {self.char} at position {self.text_buffer_pointer} is not a valid Token"
             )
 
@@ -138,9 +151,10 @@ class Lexer:
     """
     A simple pattern-based lexer/tokenizer.
 
-    All the regexes are concatenated into a single one with named groups. Since the group names
-    must be valid Python identifiers, but the token types used by the user are arbitrary
-    strings, we auto-generate the group names and map them to token types.
+    All the regexes are concatenated into a single one with named groups. The group names
+    must be valid Python identifiers. The token types used by the user are arbitrary strings,
+    we auto-generate the group names and map them to token types, unless a group is specified
+    by the user.
 
     :param rules: A list of rules. Each rule is a :class:`str`, :class:`re.Pattern` pair, where
         :class:`str` is the type of the token to return when it's recognized and
@@ -256,36 +270,17 @@ class Lexer:
                     char=self.current_char,
                 )
 
-    def generate_token_from_match(self, regex_match):
-        token: Optional[Token] = None
+    def generate_token_from_match(self, regex_match: MatchPattern) -> Token:
+        token_vars = {}
         all_groups = regex_match.groupdict().items()
 
         for curr_group, curr_value in all_groups:
             if curr_value:
-                token_name = self._group_type[curr_group]
-                if not token:
-                    token = Token(token_name, self._text_buffer_pointer, {})
+                token_vars[curr_group] = curr_value
 
-                token.val[curr_group] = curr_value
+        token_name = self._group_type[str(regex_match.lastgroup)]
 
+        created_token = Token(token_name, self._text_buffer_pointer, token_vars)
         self._text_buffer_pointer = regex_match.end()
 
-        return token
-
-
-if __name__ == "__main__":
-    rules = {
-        "VARIABLE": r"(?P<var_name>[a-z_]+): (?P<var_type>[A-Z]\w+)",
-        "NUMBER": r"\d+",
-        "EQUALS": r"=",
-        "SPACE": r" ",
-        "NEWLINE": r"\n",
-        "STRING": r"\".*\"",
-    }
-
-    data = "first_word: String = \"Hello\""
-
-    data = data.strip()
-
-    for curr_token in Lexer(rules, True, data):
-        print(curr_token)
+        return created_token

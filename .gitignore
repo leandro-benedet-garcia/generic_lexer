@@ -1,8 +1,22 @@
-docs/build
+# Cache
 __pycache__
 .mypy_cache
+
+# Python stuff
 .tox
 .venv
-.vscode
+.coverages
 Pipfile.lock
-simple_parser.egg-info
+
+# Install Stuff
+*.egg-info
+
+# IDE
+.env
+.vscode
+generic_lexer.code-workspace
+
+# Docs
+docs/build
+docs/cache
+docs/output

@@ -19,7 +19,8 @@ Project Information
 ===================
 """
 project = generic_lexer.__package__
-authors = generic_lexer.__authors__
+author = generic_lexer.__author__
+maintainer = generic_lexer.__maintainer__
 version = generic_lexer.__version__
 
 

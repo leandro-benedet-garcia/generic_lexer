@@ -1,4 +1,0 @@
-
-[build_doc]
-Sphinx
-sphinx-autodoc-typehints
