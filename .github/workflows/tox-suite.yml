@@ -6,6 +6,8 @@ on:
 
 jobs:
   test-tox:
+    outputs:
+      dir: ${{ steps.pip-cache.outputs.dir }}
     runs-on: ${{ matrix.platform }}
     strategy:
       matrix:
