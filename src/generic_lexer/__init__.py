@@ -15,6 +15,9 @@ Generic Lexer
     :alt: License: Unlicense
 .. image:: https://img.shields.io/github/workflow/status/cerberus1746/generic_lexer/tox-suite.yml
     :alt: GitHub Workflow Status
+.. image:: https://coveralls.io/repos/github/Cerberus1746/generic_lexer/badge.svg
+    :target: https://coveralls.io/github/Cerberus1746/generic_lexer
+    :alt: Coveralls Status
 
 {__description__}
 
