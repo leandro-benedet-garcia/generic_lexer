@@ -14,7 +14,7 @@ jobs:
         python-version: [3.6, 3.7, 3.8, 3.9, pypy3]
 
     env:
-      NOT_PYPY_AND_WINDOWS: ${{ !contains(matrix.platform, "windows") && matrix.python-version != "pypy3" }}
+      NOT_PYPY_AND_WINDOWS: ${{ matrix.platform != "windows-latest" && matrix.python-version != "pypy3" }}
       
     steps:
     - uses: actions/checkout@v1
