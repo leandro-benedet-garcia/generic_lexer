@@ -4,6 +4,9 @@ on:
   - push
   - pull_request
 
+env:
+  NOT_PYPY_AND_WINDOWS: ${{ !contains(matrix.platform, "windows") && matrix.python-version != "pypy3" }}
+
 jobs:
   build:
     runs-on: ${{ matrix.platform }}
@@ -15,16 +18,19 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python ${{ matrix.python-version }}
+      if:  ${{ env.NOT_PYPY_AND_WINDOWS }}
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
 
     - name: Install dependencies
+      if:  ${{ env.NOT_PYPY_AND_WINDOWS }}
       run: |
         python -m pip install --upgrade pip
         pip install tox tox-gh-actions
 
     - name: Test with tox
+      if:  ${{ env.NOT_PYPY_AND_WINDOWS }}
       run: tox
       env:
         PLATFORM: ${{ matrix.platform }}
