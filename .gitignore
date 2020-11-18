@@ -5,7 +5,7 @@ __pycache__
 # Python stuff
 .tox
 .venv
-.coverage
+.coverage/
 Pipfile.lock
 
 # Install Stuff
