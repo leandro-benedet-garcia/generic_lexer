@@ -29,6 +29,7 @@ jobs:
       with:
         path: ~/.tox
         key: ${{ runner.os }}-${{ hashFiles('**/tox.ini') }}
+        restore-keys: ${{ runner.os }}-
 
     - name: Install dependencies
       run: |
