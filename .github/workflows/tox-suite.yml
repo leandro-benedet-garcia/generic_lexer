@@ -18,6 +18,13 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      - name: Tox cache
+        uses: actions/cache@v2
+        with:
+          path: .tox
+          key: ${{ runner.os }}-tox-${{ hashFiles('**/.tox.ini') }}
+          restore-keys: ${{ runner.os }}-tox-
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -54,9 +61,26 @@ jobs:
     needs: test-tox
     runs-on: ubuntu-latest
     steps:
+      - name: Set up Python
+        uses: actions/setup-python@v2
+
+      - name: Update pip
+        run: python -m pip install --upgrade pip
+
+      - name: Pip cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ needs.test-tox.outputs.dir }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/.tox.ini') }}
+          restore-keys: ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: pip install tox tox-gh-actions 
+
       - uses: actions/download-artifact@v2
         with:
           name: coverage-data
-      
+          path: .coverage/
+
       - name: Coverage
         run: tox -e report
