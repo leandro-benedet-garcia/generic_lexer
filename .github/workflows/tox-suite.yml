@@ -95,4 +95,4 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.TEST_REPORTER_ID }}
         with:
           coverageLocations: |
-            .coverage/:coverage.py
+            .coverage/coverage.xml:coverage.py
