@@ -36,21 +36,7 @@
                 "type": "shell",
                 "command": "python -m sphinx -d docs/cache -b doctest docs docs/build",
                 "group": "test",
-                "problemMatcher": {
-                    "owner": "python",
-                    "fileLocation": "autoDetect",
-                    "pattern": [
-                        {
-                            "regexp": "^\\s*File \\\"([^\\\"]|.*)\\\", line (\\d+).*",
-                            "file": 1,
-                            "line": 2
-                        },
-                        {
-                            "regexp": "^\\s*(.*)\\s*$",
-                            "code": 1
-                        }
-                    ]
-                }
+                "problemMatcher": []
             }
         ]
     },
@@ -70,7 +56,7 @@
         },
         "autoDocstring.docstringFormat": "sphinx",
         "python.linting.mypyEnabled": true,
-        "coverage-gutters.coverageReportFileName": "${workspaceFolder}/.coverages/html/index.html",
-        "coverage-gutters.coverageBaseDir": "${workspaceFolder}/.coverages"
+        "coverage-gutters.coverageReportFileName": "${workspaceFolder}/.coverage/html/index.html",
+        "coverage-gutters.coverageBaseDir": "${workspaceFolder}/.coverage/"
     }
 }

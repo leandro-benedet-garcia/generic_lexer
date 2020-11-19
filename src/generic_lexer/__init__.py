@@ -7,17 +7,26 @@
 =============
 Generic Lexer
 =============
-.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
-    :target: https://github.com/psf/black
-    :alt: Code style: black
 .. image:: https://img.shields.io/badge/license-Unlicense-blue.svg
     :target: http://unlicense.org/
     :alt: License: Unlicense
-.. image:: https://img.shields.io/github/workflow/status/cerberus1746/generic_lexer/tox-suite.yml
+
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/psf/black
+    :alt: Code style: Black
+
+.. image:: https://img.shields.io/github/workflow/status/cerberus1746/generic_lexer/Tox%20Testing%20Suite
+    :target: https://github.com/Cerberus1746/generic_lexer/actions?query=workflow%3A%22Tox+Testing+Suite%22
     :alt: GitHub Workflow Status
-.. image:: https://coveralls.io/repos/github/Cerberus1746/generic_lexer/badge.svg
-    :target: https://coveralls.io/github/Cerberus1746/generic_lexer
-    :alt: Coveralls Status
+
+.. image:: https://img.shields.io/codeclimate/coverage/Cerberus1746/generic_lexer
+    :target: https://codeclimate.com/github/Cerberus1746/generic_lexer/code
+    :alt: Code Climate Coverage
+
+.. image:: https://img.shields.io/codeclimate/coverage-letter/Cerberus1746/generic_lexer
+    :target: https://codeclimate.com/github/Cerberus1746/generic_lexer
+    :alt: Code Climate Graduation
+
 
 {__description__}
 
