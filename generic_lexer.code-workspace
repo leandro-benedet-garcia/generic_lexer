@@ -21,7 +21,7 @@
             {
                 "label": "Run Tox Test Suite",
                 "type": "shell",
-                "command": "tox",
+                "command": "tox -p",
                 "group": "test"
             },
             {
@@ -56,7 +56,5 @@
         },
         "autoDocstring.docstringFormat": "sphinx",
         "python.linting.mypyEnabled": true,
-        "coverage-gutters.coverageReportFileName": "${workspaceFolder}/.coverage/html/index.html",
-        "coverage-gutters.coverageBaseDir": "${workspaceFolder}/.coverage/"
     }
 }

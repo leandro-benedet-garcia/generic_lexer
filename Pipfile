@@ -1,6 +1,0 @@
-[dev-packages]
-tox = "*"
-sphinx-autodoc-typehints = "*"
-mypy = "*"
-pytest = "*"
-sphinx-markdown-builder = "*"
