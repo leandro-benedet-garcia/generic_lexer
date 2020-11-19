@@ -2,5 +2,5 @@
 tox = "*"
 sphinx-autodoc-typehints = "*"
 mypy = "*"
-rope = "*"
 pytest = "*"
+sphinx-markdown-builder = "*"
