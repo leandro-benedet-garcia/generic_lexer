@@ -12,7 +12,7 @@ jobs:
       - uses: Cerberus1746/sphinx-action@master
         with:
           build-command: |
-            python -m sphinx -b html ${{ github.workspace }}/docs ${{ github.workspace }}/docs/build/
+            python -m sphinx -b html . ${{ github.workspace }}/docs/build/
 
       - name: Commit documentation changes
         run: |
