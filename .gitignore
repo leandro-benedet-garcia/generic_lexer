@@ -18,5 +18,6 @@ generic_lexer.code-workspace
 
 # Docs
 docs/build
+docs/_build
 docs/cache
 docs/output
