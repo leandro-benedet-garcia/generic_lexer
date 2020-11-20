@@ -1,0 +1,73 @@
+import os
+import logging
+import pathlib
+
+import pytest
+
+
+current_folder = pathlib.Path(__file__).parent
+
+
+@pytest.fixture(scope="session")
+def curr_logger():
+    work_dir = pathlib.Path(os.getenv("TOX_WORK_DIR", current_folder))
+    current_tox_env = os.getenv("TOX_ENV_NAME", "")
+    file_logger = logging.FileHandler(work_dir / current_tox_env / "testing.log.rst", "w")
+
+    curr_logger = logging.getLogger()
+    curr_logger.setLevel(logging.DEBUG)
+    curr_logger.addHandler(file_logger)
+
+    test_title = "PyTest"
+    test_title_separator = "=" * len(test_title)
+
+    curr_logger.debug(test_title_separator)
+    curr_logger.debug(test_title)
+    curr_logger.debug(test_title_separator + "\n")
+
+    return curr_logger
+
+
+@pytest.fixture(scope="session")
+def text_to_parse():
+    with open(current_folder / "text_to_parse.txt") as orig_text:
+        return orig_text.read()
+
+
+@pytest.fixture(scope="session")
+def complex_token_dict():
+    return {"first_var": "10", "second_var": "TESTING"}
+
+
+@pytest.fixture(scope="session")
+def tuple_rules():
+    return (
+        ("VARIABLE", r"(?P<var_name>[a-z_]+):(?P<var_type>[A-Z]\w+)"),
+        ("NAMESPACE", r"namespace:(?P<namespace>[a-z]+)"),
+        ("LB", r"\n"),
+        ("EQUALS", r"="),
+        ("SPACE", r" "),
+        ("TAB", r"\t"),
+        ("STRING", r"\"(?P<curr_str>.*)\""),
+    )
+
+
+@pytest.fixture(scope="session")
+def dict_rules(tuple_rules):
+    return dict(tuple_rules)
+
+
+@pytest.fixture(scope="session")
+def debug_log_code(curr_logger):
+    def inner(text_to_parse):
+        if isinstance(text_to_parse, list) and not isinstance(text_to_parse[0], str):
+            lines = list(map(str, text_to_parse))
+        else:
+            lines = text_to_parse
+
+        if isinstance(text_to_parse, str):
+            lines = text_to_parse.split("\n")
+
+        curr_logger.debug("\n::\n\n    " + "\n    ".join(lines))
+
+    return inner

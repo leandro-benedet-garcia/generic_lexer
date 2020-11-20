@@ -43,6 +43,7 @@
         ]
     },
     "settings": {
+        "python.envFile": "${workspaceFolder}/.env",
         "python.pythonPath": "d:\\Projetos\\generic_lexer\\.venv\\Scripts\\python.exe",
         "restructuredtext.confPath": "${workspaceFolder}\\docs",
         "python.analysis.extraPaths": [

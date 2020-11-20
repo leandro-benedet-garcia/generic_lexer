@@ -69,7 +69,7 @@ Will give us the following output:
 """
 import re
 import sys
-from typing import Dict, Iterable, Iterator, Set, Tuple, Union
+from typing import Dict, ItemsView, Iterable, Iterator, List, Set, Tuple, Union
 
 
 __version__ = "1.1.0"
@@ -121,48 +121,33 @@ class Token:
 
         return self._val
 
-    def __str__(self):
-        return f"{self.name}({self.val}) at {self.position}"
+    def __repr__(self):
+        values = str(self.val).replace("\n", "\\n")
+        values = values.replace("\t", "\\t")
+
+        return f"{self.name}({values}) at {self.position}"
+
+    __str__ = __repr__
 
 
 class LexerError(Exception):
     """
     Lexer error exception.
 
-    :param message: the error message, you can use `{text_buffer_pointer}` or/and `{char}` in the
-        string so the attribute are formated trough :meth:`str.format`
     :param text_buffer_pointer: position in the input_buf line where the error occurred.
     :param char: the character that triggered the error
     """
 
-    __slots__ = ("text_buffer_pointer", "message", "char")
+    __slots__ = ("text_buffer_pointer", "char")
 
-    def __init__(self, message: str = "", text_buffer_pointer: int = -1, char: str = ""):
-        self.message = message
+    def __init__(self, char: str, text_buffer_pointer: int):
         self.text_buffer_pointer = text_buffer_pointer
         self.char = char
 
-    def __str__(self):
-        if self.message and (self.char or self.text_buffer_pointer > 0):
-            return self.message.format(
-                _text_buffer_pointer=self.text_buffer_pointer, char=self.char
-            )
+    def __repr__(self):
+        return f'The char "{self.char}" at position {self.text_buffer_pointer} is not a valid Token'
 
-        if self.text_buffer_pointer > 0 and self.char:
-            return (
-                f"The char {self.char} at position {self.text_buffer_pointer} is not a valid Token"
-            )
-
-        if self.char:
-            return f"The char {self.char} is not a valid Token"
-
-        if self.text_buffer_pointer > 0:
-            return f"No valid Token at {self.text_buffer_pointer}"
-
-        if self.message:
-            return self.message
-
-        return "A invalid token was found"
+    __str__ = __repr__
 
 
 class Lexer:
@@ -170,9 +155,8 @@ class Lexer:
     A simple pattern-based lexer/tokenizer.
 
     All the regexes are concatenated into a single one with named groups. The group names
-    must be valid Python identifiers. The token types used by the user are arbitrary strings,
-    we auto-generate the group names and map them to token types, unless a group is specified
-    by the user.
+    must be valid Python identifiers. The patterns without groups auto generate them.
+    Groups are then mapped to token names.
 
     :param rules: A list of rules. Each rule is a :class:`str`, :class:`re.Pattern` pair, where
         :class:`str` is the type of the token to return when it's recognized and
@@ -192,6 +176,8 @@ class Lexer:
         "_group_type",
         "_text_buffer_pointer",
         "_lexer_pattern",
+        "_finished_token_generation",
+        "_token_list",
     )
 
     def __init__(
@@ -208,6 +194,7 @@ class Lexer:
         self._pattern_id: int = 0
         self._re_ws_skip: PatternType = re.compile("\S")
         self._regex_parts: Set[str] = set()
+        self._token_list: List[Token] = []
         self._group_type: Dict[str, str] = {}
 
         if isinstance(rules, dict):
@@ -227,17 +214,32 @@ class Lexer:
 
     # Text buffer property
     def get_text_buffer(self) -> str:
+        """
+        Get the current text to be parsed into the lexer
+        """
         return self._text_buffer
 
-    def set_text_buffer(self, value):
+    def set_text_buffer(self, value: str):
+        """
+        Set the text to be parsed into the lexer and set the pointer back to 0
+        """
         self._text_buffer_pointer = 0
         self._text_buffer = value
 
     def clear_text_buffer(self):
+        """
+        Set the text buffer to a blank string and set the text pointer to 0
+        """
         self._text_buffer_pointer = 0
         self._text_buffer = ""
 
-    text_buffer = property(get_text_buffer, set_text_buffer, clear_text_buffer)
+    text_buffer = property(
+        get_text_buffer,
+        set_text_buffer,
+        clear_text_buffer,
+        "Set, Get or Clear the text buffer, you may use :keyword:`del` "
+        "with this property to clear the text buffer",
+    )
 
     def get_char_at_current_pointer(self) -> str:
         return self.get_char_at(self._text_buffer_pointer)
@@ -280,7 +282,7 @@ class Lexer:
             regex_match = self._lexer_pattern.match(self.text_buffer, self._text_buffer_pointer)
 
             if regex_match:
-                yield self.generate_token_from_match(regex_match)
+                yield self._generate_token_from_match(regex_match)
             else:
                 # if we're here, no rule matched
                 raise LexerError(
@@ -288,9 +290,12 @@ class Lexer:
                     char=self.current_char,
                 )
 
-    def generate_token_from_match(self, regex_match: MatchPattern) -> Token:
+        self._text_buffer_pointer = 0
+        self._finished_token_generation = True
+
+    def _generate_token_from_match(self, regex_match: MatchPattern) -> Token:
         token_vars = {}
-        all_groups = regex_match.groupdict().items()
+        all_groups: ItemsView[str, str] = regex_match.groupdict().items()
 
         for curr_group, curr_value in all_groups:
             if curr_value:
