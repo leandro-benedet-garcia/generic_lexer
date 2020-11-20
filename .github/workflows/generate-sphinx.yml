@@ -19,7 +19,6 @@ jobs:
           git clone https://github.com/Cerberus1746/generic_lexer.git \
             --branch gh-pages \
             --single-branch gh-pages
-          rm -r ${{ github.workspace }}/build/.doctrees
           cp -r ${{ github.workspace }}/build/ gh-pages/
           cd gh-pages
           git config --local user.email "action@github.com"
