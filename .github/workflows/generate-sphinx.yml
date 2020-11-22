@@ -1,4 +1,5 @@
-name: "Generate Sphinx Docs"
+name: Generate Sphinx Docs
+
 on:
   push:
     branches:
