@@ -53,7 +53,7 @@ If we try to execute the following code:
     }}
 
     data = "first_word: String = \\"Hello\\""
-    data = data.strip()
+
     for curr_token in Lexer(rules, False, data):
         print(curr_token)
 
@@ -102,6 +102,44 @@ class Token:
     """
     A simple Token structure. Contains the token name, value and position.
 
+    As you can see differently from the original gist,
+    we are capable of specifying multiple groups per token.
+
+    You may get the values of the tokens this way:
+
+    .. doctest:: token_sample
+
+        >>> from generic_lexer import Lexer
+        >>> rules = {
+        ...     "VARIABLE": r"(?P<var_name>[a-z_]+): (?P<var_type>[A-Z]\w+)",
+        ...     "EQUALS": r"=",
+        ...     "STRING": r"\\".*\\"",
+        ... }
+        >>> data = "first_word: String = \\"Hello\\""
+        >>> variable, equals, string = tuple(Lexer(rules, True, data))
+
+        >>> variable
+        VARIABLE({'var_name': 'first_word', 'var_type': 'String'}) at 0
+
+        >>> variable.val
+        {'var_name': 'first_word', 'var_type': 'String'}
+        >>> variable["var_name"]
+        'first_word'
+        >>> variable["var_type"]
+        'String'
+
+        >>> equals
+        EQUALS(=) at 19
+
+        >>> equals.val
+        '='
+
+        >>> string
+        STRING("Hello") at 21
+
+        >>> string.val
+        '"Hello"'
+
     :param name: the name of the token
     :param position: the position the token was found in the text buffer
     :param val: token's value
@@ -126,6 +164,9 @@ class Token:
         values = values.replace("\t", "\\t")
 
         return f"{self.name}({values}) at {self.position}"
+
+    def __getitem__(self, key):
+        return self._val[key]
 
     __str__ = __repr__
 
