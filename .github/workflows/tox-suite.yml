@@ -97,6 +97,12 @@ jobs:
           coverageLocations: |
             .coverage/coverage.xml:coverage.py
 
+      - name: Generate package build
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+        run: |
+          pip install -U setuptools wheel
+          python setup.py sdist bdist_wheel
+
       - name: Publish package
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
         uses: pypa/gh-action-pypi-publish@master

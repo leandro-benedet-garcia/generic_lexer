@@ -72,10 +72,12 @@ import sys
 from typing import Dict, ItemsView, Iterable, Iterator, List, Set, Tuple, Union
 
 
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 __license__ = "The Unlicense"
-__author__ = "Eli Bendersky <eliben@gmail.com>"
-__maintainer__ = "Leandro Benedet Garcia <cerberus1746@gmail.com>"
+__author__ = "Eli Bendersky"
+__author_email__ = "eliben@gmail.com"
+__maintainer__ = "Leandro Benedet Garcia"
+__maintainer_email__ = "cerberus1746@gmail.com"
 __description__ = "A generic pattern-based Lexer/tokenizer tool."
 __url__ = "https://github.com/Cerberus1746/generic_lexer/"
 __min_python_version__ = (3, 6)

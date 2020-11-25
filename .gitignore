@@ -2,22 +2,27 @@
 __pycache__
 .mypy_cache
 
+
 # Python stuff
 .tox
 .venv
 .coverage/
 Pipfile.lock
 
-# Install Stuff
-*.egg-info
 
 # IDE
 .env
 .vscode
 generic_lexer.code-workspace
 
+
 # Docs
 docs/build
 docs/_build
 docs/cache
 docs/output
+
+# Package build
+src/generic_lexer.egg-info/
+build/
+dist/
