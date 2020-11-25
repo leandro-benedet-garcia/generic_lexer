@@ -1,3 +1,17 @@
+# Tests
 .tox
-.venv
+tests/
+
+.coverage/
+dist/
+
+# Source is ignored
+src/
+
+# Cache
+docs/cache/
 .*_cache
+
+# Enviroment
+.venv
+.env
