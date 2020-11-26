@@ -19,7 +19,7 @@ The minimum python version is 3.6
         <a href="mailto:cerberus1746@gmail.com">Leandro Benedet Garcia</a> last modified on 2020/11
     </dd>
     <dt>Version</dt>
-    <dd>1.1.0</dd>
+    <dd>1.1.1</dd>
     <dt>License</dt>
     <dd>The Unlicense</dd>
     <dt>Documentation</dt>
