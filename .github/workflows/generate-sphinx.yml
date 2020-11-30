@@ -10,6 +10,8 @@ jobs:
       - uses: actions/checkout@v1
 
       - uses: Cerberus1746/sphinx-action@master
+        with:
+          dependency-install-command: pip install -r docs/requirements.txt 
 
       - name: Commit documentation changes
         run: |
