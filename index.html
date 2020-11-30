@@ -46,13 +46,13 @@
 <p>The minimun python version is 3.6</p>
 <dl class="field-list simple">
 <dt class="field-odd">Version</dt>
-<dd class="field-odd"><p>1.1.0</p>
+<dd class="field-odd"><p>1.1.1</p>
 </dd>
 <dt class="field-even">Maintainer</dt>
-<dd class="field-even"><p>Leandro Benedet Garcia &lt;<a class="reference external" href="mailto:cerberus1746&#37;&#52;&#48;gmail&#46;com">cerberus1746<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</p>
+<dd class="field-even"><p>Leandro Benedet Garcia</p>
 </dd>
 <dt class="field-odd">Author</dt>
-<dd class="field-odd"><p>Eli Bendersky &lt;<a class="reference external" href="mailto:eliben&#37;&#52;&#48;gmail&#46;com">eliben<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</p>
+<dd class="field-odd"><p>Eli Bendersky</p>
 </dd>
 <dt class="field-even">License</dt>
 <dd class="field-even"><p>The Unlicense</p>
@@ -183,12 +183,12 @@ of a lexing error (if the current chunk of the buffer matches no rule).</p>
 we are capable of specifying multiple groups per token.</p>
 <p>You may get the values of the tokens this way:</p>
 <div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">generic_lexer</span> <span class="kn">import</span> <span class="n">Lexer</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rules</span> <span class="o">=</span> <span class="p">{{</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rules</span> <span class="o">=</span> <span class="p">{</span>
 <span class="gp">... </span>    <span class="s2">&quot;VARIABLE&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;(?P&lt;var_name&gt;[a-z_]+): (?P&lt;var_type&gt;[A-Z]\w+)&quot;</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="s2">&quot;EQUALS&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;=&quot;</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="s2">&quot;STRING&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">.*</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">,</span>
-<span class="gp">... </span><span class="p">}}</span>
-<span class="gp">... </span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;first_word: String = </span><span class="se">\&quot;</span><span class="s2">Hello</span><span class="se">\&quot;</span><span class="s2">&quot;</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;first_word: String = </span><span class="se">\&quot;</span><span class="s2">Hello</span><span class="se">\&quot;</span><span class="s2">&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">variable</span><span class="p">,</span> <span class="n">equals</span><span class="p">,</span> <span class="n">string</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">Lexer</span><span class="p">(</span><span class="n">rules</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">variable</span>
@@ -228,6 +228,21 @@ we are capable of specifying multiple groups per token.</p>
 </div>
 <div class="toctree-wrapper compound">
 </div>
+<div class="section" id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>1.1.1<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="added">
+<h3>Added<a class="headerlink" href="#added" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="#generic_lexer.Token" title="generic_lexer.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a> can have multiple values,
+they can be set or get like the example in the <a class="reference internal" href="#generic_lexer.Token" title="generic_lexer.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a> class.</p></li>
+<li><p><a class="reference internal" href="#generic_lexer.Lexer" title="generic_lexer.Lexer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Lexer</span></code></a> can have patterns with named groups that
+can be acessed trough <a class="reference internal" href="#generic_lexer.Token" title="generic_lexer.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a>.</p></li>
+</ul>
+</div>
+</div>
+</div>
 
 
             <div class="clearer"></div>
@@ -236,6 +251,18 @@ we are capable of specifying multiple groups per token.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Generic Lexer</a></li>
+<li><a class="reference internal" href="#changelog">Changelog</a><ul>
+<li><a class="reference internal" href="#id1">1.1.1</a><ul>
+<li><a class="reference internal" href="#added">Added</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
