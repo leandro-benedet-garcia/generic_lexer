@@ -18,32 +18,33 @@ def test_lexer(debug_log_code, curr_logger, dict_rules, text_to_parse):
     curr_logger.debug(parse_text_title)
     curr_logger.debug("=" * len(parse_text_title))
 
-    debug_log_code(text_to_parse)
+    lexer_with_whitespace = generic_lexer.Lexer(dict_rules, text_buffer=tabbed_input)
+    lexer_without_whitespace = generic_lexer.Lexer(dict_rules, True, tabbed_input)
 
-    curr_lexer = generic_lexer.Lexer(dict_rules, text_buffer=tabbed_input)
-    curr_lexer_without_whitespace = generic_lexer.Lexer(dict_rules, True, tabbed_input)
+    repr_test = list(map(repr, lexer_with_whitespace))
+    debug_log_code(repr_test)
 
-    assert list(map(repr, curr_lexer)) == [
-        "NAMESPACE(paletter) at 0",
-        "LB(\\n) at 18",
-        "TAB(\\t) at 19",
+    assert repr_test == [
+        "NAMESPACE('paletter') at 0",
+        "LB('\\n') at 18",
+        "TAB('\\t') at 19",
         "VARIABLE({'var_name': 'name', 'var_type': 'String'}) at 20",
-        "SPACE( ) at 31",
-        "EQUALS(=) at 32",
-        "SPACE( ) at 33",
-        "STRING(test) at 34",
-        "LB(\\n) at 40",
+        "SPACE(' ') at 31",
+        "EQUALS('=') at 32",
+        "SPACE(' ') at 33",
+        "STRING('test') at 34",
+        "LB('\\n') at 40",
     ]
 
-    assert list(map(repr, curr_lexer_without_whitespace)) == [
-        "NAMESPACE(paletter) at 0",
+    assert list(map(repr, lexer_without_whitespace)) == [
+        "NAMESPACE('paletter') at 0",
         "VARIABLE({'var_name': 'name', 'var_type': 'String'}) at 20",
-        "EQUALS(=) at 32",
-        "STRING(test) at 34",
+        "EQUALS('=') at 32",
+        "STRING('test') at 34",
     ]
 
-    curr_lexer_list = list(curr_lexer)
-    curr_lexer_without_whitespace_list = list(curr_lexer_without_whitespace)
+    curr_lexer_list = list(lexer_with_whitespace)
+    curr_lexer_without_whitespace_list = list(lexer_without_whitespace)
 
     assert any(curr_lexer_list)
     assert any(curr_lexer_without_whitespace_list)
@@ -51,8 +52,8 @@ def test_lexer(debug_log_code, curr_logger, dict_rules, text_to_parse):
     debug_log_code(curr_lexer_list)
     debug_log_code(curr_lexer_without_whitespace_list)
 
-    del curr_lexer.text_buffer
-    assert not any(curr_lexer.text_buffer)
+    del lexer_with_whitespace.text_buffer
+    assert not any(lexer_with_whitespace.text_buffer)
 
 
 def test_lexer_exception(dict_rules):

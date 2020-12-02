@@ -37,6 +37,7 @@ The minimun python version is 3.6
 :Author: {__author__}
 :License: {__license__}
 
+
 :Example:
 
 If we try to execute the following code:
@@ -67,12 +68,28 @@ Will give us the following output:
     SPACE( ) at 20
     STRING("Hello") at 21
 """
+import logging
+import os
+import pathlib
 import re
 import sys
-from typing import Dict, ItemsView, Iterable, Iterator, List, Set, Tuple, Union
+import tempfile
+from logging import Logger
+from typing import (
+    Dict,
+    ItemsView,
+    Iterable,
+    Iterator,
+    List,
+    Optional,
+    Set,
+    Tuple,
+    Union,
+    get_type_hints,
+)
 
 
-__version__ = "1.1.1"
+__version__ = "1.1.2"
 __license__ = "The Unlicense"
 __author__ = "Eli Bendersky"
 __author_email__ = "eliben@gmail.com"
@@ -83,23 +100,55 @@ __url__ = "https://github.com/Cerberus1746/generic_lexer/"
 __min_python_version__ = (3, 6)
 
 
+# +-------------------------+
+# | Set logging information |
+# +-------------------------+
+DEBUG: Optional[str] = os.getenv("DEBUG_GENERIC_LEXER")
+
+tmp_log_folder = pathlib.Path(tempfile.gettempdir()) / "generic_lexer" / "logs"
+tmp_log_folder.mkdir(parents=True, exist_ok=True)
+
+log_stream = logging.StreamHandler(stream=sys.stdout)
+log_file = logging.FileHandler(tmp_log_folder / "run.log.rst")
+
+logger: Logger = logging.getLogger("generic_lexer")
+logger.addHandler(log_stream)
+logger.addHandler(log_file)
+
+if DEBUG:
+    logger.setLevel(logging.DEBUG)
+
+
 if "sphinx" in sys.modules:  # pragma: no cover
     __doc__ = __doc__.format(**globals())
 
+
+# +------------------------+
+# | Version specific stuff |
+# +------------------------+
 if sys.version_info < __min_python_version__:  # pragma: no cover
     sys.exit(
         f"The package does not support the current python version ({sys.version}) "
         f"you must use Python {__min_python_version__} or above"
     )
+
+# Python versions under 3.7 doesn't have Pattern or Match, so we use str instead as a type
+# Python version 3.9 implements support for [] in Pattern and Match
+# but this does not work with other versions
+# (Long live Tox/Nox)
 elif sys.version_info < (3, 7):
-    # Python versions under 3.7 doesn't have Pattern or Match, so we use str instead as a type
     PatternType = str
     MatchPattern = str
-else:
+elif sys.version_info < (3, 9):
     PatternType = re.Pattern
     MatchPattern = re.Match
+else:
+    PatternType = re.Pattern[str]
+    MatchPattern = re.Match[str]
 
-
+# +-------------------+
+# | Class definitions |
+# +-------------------+
 class Token:
     """
     A simple Token structure. Contains the token name, value and position.
@@ -147,12 +196,13 @@ class Token:
     :param val: token's value
     """
 
-    __slots__ = ("_val", "name", "position")
+    __slots__ = ("_val", "name", "position", "lexer")
 
-    def __init__(self, name, position, val):
+    def __init__(self, name, position, val, lexer=False):
         self.name: str = name
         self._val: Dict[str, str] = val
         self.position: int = position
+        self.lexer = lexer
 
     @property
     def val(self) -> Union[Dict[str, str], str]:
@@ -162,8 +212,7 @@ class Token:
         return self._val
 
     def __repr__(self):
-        values = str(self.val).replace("\n", "\\n")
-        values = values.replace("\t", "\\t")
+        values = str(repr(self.val))
 
         return f"{self.name}({values}) at {self.position}"
 
@@ -237,8 +286,9 @@ class Lexer:
         self._pattern_id: int = 0
         self._re_ws_skip: PatternType = re.compile("\S")
         self._regex_parts: Set[str] = set()
-        self._token_list: List[Token] = []
         self._group_type: Dict[str, str] = {}
+
+        self.reset_tokens()
 
         if isinstance(rules, dict):
             rules = rules.items()
@@ -247,26 +297,36 @@ class Lexer:
             self.pattern_token(token_name, pattern)
 
         self._lexer_pattern = re.compile("|".join(self._regex_parts))
+        logger.debug("Created token: %s", repr(self))
 
     def __iter__(self):
         yield from self.tokens()
 
+    def __repr__(self):
+        map(repr, self.__slots__)
+
     @property
     def current_char(self):
         return self.get_char_at_current_pointer()
+
+    def reset_tokens(self):
+        self._text_buffer_pointer = 0
+        self._finished_token_generation = False
+        self._token_list = []
 
     # Text buffer property
     def get_text_buffer(self) -> str:
         """
         Get the current text to be parsed into the lexer
         """
+        self._text_buffer_pointer = 0
         return self._text_buffer
 
     def set_text_buffer(self, value: str):
         """
         Set the text to be parsed into the lexer and set the pointer back to 0
         """
-        self._text_buffer_pointer = 0
+        self.reset_tokens()
         self._text_buffer = value
 
     def clear_text_buffer(self):
@@ -275,6 +335,7 @@ class Lexer:
         """
         self._text_buffer_pointer = 0
         self._text_buffer = ""
+        self.reset_tokens()
 
     text_buffer = property(
         get_text_buffer,
@@ -313,7 +374,10 @@ class Lexer:
             of a lexing error (if the current chunk of the buffer matches no rule).
         :yields: the next token (a Token object) found in the :attr:`Lexer.text_buffer`.
         """
-        while self._text_buffer_pointer < len(self.text_buffer):
+        while(
+            self._text_buffer_pointer < len(self.text_buffer) and
+            not self._finished_token_generation
+        ):
             if skip_whitespace or self._skip_whitespace:
                 regex_match = self._re_ws_skip.search(self.text_buffer, self._text_buffer_pointer)
 
@@ -325,7 +389,9 @@ class Lexer:
             regex_match = self._lexer_pattern.match(self.text_buffer, self._text_buffer_pointer)
 
             if regex_match:
-                yield self._generate_token_from_match(regex_match)
+                generated_token = self._generate_token_from_match(regex_match)
+                self._token_list.append(generated_token)
+                yield generated_token
             else:
                 # if we're here, no rule matched
                 raise LexerError(
@@ -333,7 +399,9 @@ class Lexer:
                     char=self.current_char,
                 )
 
-        self._text_buffer_pointer = 0
+        if self._finished_token_generation:
+            yield from self._token_list
+
         self._finished_token_generation = True
 
     def _generate_token_from_match(self, regex_match: MatchPattern) -> Token:
@@ -346,7 +414,7 @@ class Lexer:
 
         token_name = self._group_type[str(regex_match.lastgroup)]
 
-        created_token = Token(token_name, self._text_buffer_pointer, token_vars)
+        created_token = Token(token_name, self._text_buffer_pointer, token_vars, self)
         self._text_buffer_pointer = regex_match.end()
 
         return created_token

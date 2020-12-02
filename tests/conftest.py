@@ -1,6 +1,7 @@
 import os
 import logging
 import pathlib
+import pprint
 
 import pytest
 
@@ -59,15 +60,11 @@ def dict_rules(tuple_rules):
 
 @pytest.fixture(scope="session")
 def debug_log_code(curr_logger):
-    def inner(text_to_parse):
-        if isinstance(text_to_parse, list) and not isinstance(text_to_parse[0], str):
-            lines = list(map(str, text_to_parse))
-        else:
-            lines = text_to_parse
+    def inner_debug_log_code(text_to_parse):
+        pp = pprint.PrettyPrinter(width=100)
 
-        if isinstance(text_to_parse, str):
-            lines = text_to_parse.split("\n")
+        out_str = pp.pformat(text_to_parse)
+        out_str = out_str.replace("\n", "\n    ")
+        curr_logger.debug("\n.. code :: python\n\n    " + out_str)
 
-        curr_logger.debug("\n::\n\n    " + "\n    ".join(lines))
-
-    return inner
+    return inner_debug_log_code
