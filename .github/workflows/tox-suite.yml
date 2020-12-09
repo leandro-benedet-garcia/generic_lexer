@@ -43,8 +43,16 @@ jobs:
           key: ${{ runner.os }}-tox-${{ hashFiles('**/tox.ini') }}
           restore-keys: ${{ runner.os }}-tox-
 
-      - name: Update pip and poetry
-        run: python -m pip install --upgrade pip poetry
+      - name: Update pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install poetry in MAC or UNIX
+        run: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+        if: matrix.platform == 'ubuntu-latest' ||  matrix.platform == 'macos-latest'
+
+      - name: Install poetry in Windows
+        run: (Invoke-WebRequest -Uri https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py -UseBasicParsing).Content | python -
+        if: matrix.platform == 'windows-latest'
 
       - name: Test with tox
         run: make tests

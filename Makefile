@@ -9,11 +9,9 @@ endif
 
 PIP = $(PYTHON_EXECUTABLE) -m pip
 
-install-deps:
-	poetry run tox --version || poetry install --no-root -v -E tox
-
 tests: install-deps
 	poetry run tox
+.PHONY: tests
 
 docs: install-deps
 	poetry run sphinx-build --version || poetry install --no-root -v -E docs
