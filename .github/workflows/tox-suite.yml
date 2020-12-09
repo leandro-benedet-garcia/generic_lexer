@@ -43,10 +43,9 @@ jobs:
           key: ${{ runner.os }}-tox-${{ hashFiles('**/tox.ini') }}
           restore-keys: ${{ runner.os }}-tox-
 
-      - uses: abatilo/actions-poetry@v2.0.0
-
       - name: Test with tox
         run: |
+          pip install poetry
           poetry install -E github
           poetry run tox
 
