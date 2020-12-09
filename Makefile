@@ -9,10 +9,10 @@ endif
 
 PIP = $(PYTHON_EXECUTABLE) -m pip
 
-tests: install-deps
+tests:
 	poetry run tox
 .PHONY: tests
 
-docs: install-deps
+docs:
 	poetry run sphinx-build --version || poetry install --no-root -v -E docs
 	cd docs && $(MAKE) html
