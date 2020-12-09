@@ -1,11 +1,12 @@
 import pytest
 
 import generic_lexer
+from generic_lexer import errors, lexer, token
 
 
 def test_generate_token(complex_token_dict):
-    simple_token = generic_lexer.Token("GROUP1", 0, {"VAR": "Hello"})
-    complex_token = generic_lexer.Token("GROUP1", 0, complex_token_dict)
+    simple_token = token.Token("GROUP1", 0, {"VAR": "Hello"})
+    complex_token = token.Token("GROUP1", 0, complex_token_dict)
 
     assert complex_token.val == complex_token_dict
     assert simple_token.val == "Hello"
@@ -18,8 +19,8 @@ def test_lexer(debug_log_code, curr_logger, dict_rules, text_to_parse):
     curr_logger.debug(parse_text_title)
     curr_logger.debug("=" * len(parse_text_title))
 
-    lexer_with_whitespace = generic_lexer.Lexer(dict_rules, text_buffer=tabbed_input)
-    lexer_without_whitespace = generic_lexer.Lexer(dict_rules, True, tabbed_input)
+    lexer_with_whitespace = lexer.Lexer(dict_rules, text_buffer=tabbed_input)
+    lexer_without_whitespace = lexer.Lexer(dict_rules, True, tabbed_input)
 
     repr_test = list(map(repr, lexer_with_whitespace))
     debug_log_code(repr_test)
@@ -57,10 +58,10 @@ def test_lexer(debug_log_code, curr_logger, dict_rules, text_to_parse):
 
 
 def test_lexer_exception(dict_rules):
-    with pytest.raises(generic_lexer.LexerError):
+    with pytest.raises(errors.LexerError):
         try:
-            tuple(generic_lexer.Lexer(dict_rules, text_buffer="46545das"))
-        except generic_lexer.LexerError as lexer_error:
+            tuple(lexer.Lexer(dict_rules, text_buffer="46545das"))
+        except errors.LexerError as lexer_error:
             assert lexer_error.char == "4"
             assert lexer_error.text_buffer_pointer == 0
 
