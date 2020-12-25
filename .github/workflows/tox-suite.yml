@@ -5,7 +5,7 @@ on:
   - pull_request
 
 jobs:
-  test-package:
+  test-tox:
     outputs:
       dir: ${{ steps.pip-cache.outputs.dir }}
 
