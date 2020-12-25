@@ -49,7 +49,6 @@ pip-delete-this-directory.txt
 
 # Sphinx documentation
 docs/build/
-docs/api/
 
 # PyBuilder
 target/
