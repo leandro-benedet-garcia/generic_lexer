@@ -68,7 +68,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-
       - uses: actions/setup-python@v2
 
       - name: Pip cache
@@ -111,11 +110,13 @@ jobs:
         run: poetry publish -u __token__ -p ${{ secrets.PYPI_PASSWORD }}
 
   docs:
-    needs: coverage
+    needs:
+      - coverage
+      - test-tox
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-
       - uses: actions/setup-python@v2
 
       - name: Pip cache
