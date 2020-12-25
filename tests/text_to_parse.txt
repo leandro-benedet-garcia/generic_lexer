@@ -1,0 +1,2 @@
+namespace:paletter
+    name:String = "test"

@@ -1,10 +1,12 @@
-.. rosetta-lang documentation master file, created by sphinx-quickstart on
-    Mon Nov 9 15:25:47 2020. You can adapt this file completely to your liking.
-    But it should at least contain the root `toctree` directive.
+.. include:: ../README.rst
+
+.. include:: ../SECURITY.rst
 
 .. toctree::
-    :maxdepth: 2
+   :maxdepth: 2
+   :caption: Contents:
 
-.. automodule:: rosetta_lang.base_types
-    :members:
-    :undoc-members:
+   installation
+   contributing
+   license
+   api/modules

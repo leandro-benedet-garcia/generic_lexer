@@ -1,4 +1,9 @@
-MIT License
+=======
+License
+=======
+
+MIT
+---
 
 Copyright (c) 2020 Leandro Benedet Garcia
 

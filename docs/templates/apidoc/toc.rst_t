@@ -1,0 +1,7 @@
+===
+API
+===
+
+{% for docname in docnames %}
+.. include:: {{ docname }}.rst
+{%- endfor %}
