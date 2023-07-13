@@ -10,8 +10,8 @@ generic_lexer
    :target: https://github.com/psf/black
    :alt: Code style: Black
 
-.. image:: https://img.shields.io/github/workflow/status/cerberus1746/generic_lexer/Tox%20Testing%20Suite
-   :target: https://github.com/Cerberus1746/generic_lexer/actions?query=workflow%3A%22Tox+Testing+Suite%22
+.. image:: https://img.shields.io/github/workflow/status/leandro-benedet-garcia/generic_lexer/Tox%20Testing%20Suite
+   :target: https://github.com/leandro-benedet-garcia/generic_lexer/actions?query=workflow%3A%22Tox+Testing+Suite%22
    :alt: GitHub Workflow Status
 
 .. image:: https://img.shields.io/codeclimate/coverage/Cerberus1746/generic_lexer
@@ -36,7 +36,7 @@ The minimun python version is 3.6.1
    The Unlicense
 :Documentation:
    The documentation can be found here:
-   https://cerberus1746.github.io/generic_lexer/
+   https://leandro-benedet-garcia.github.io/generic_lexer/
 
 Example
 =======
