@@ -1,6 +1,6 @@
 from typing import Any, Dict, Union
 
-from . import lexer
+from . import lexer # noqa: W0611
 
 
 class Token:
@@ -61,10 +61,11 @@ class Token:
 
     @property
     def val(self) -> Union[Dict[str, str], str]:
-        if len(self._val) == 1:
-            return next(iter(self._val.values()))
-
-        return self._val
+        return (
+            next(iter(self._val.values()))
+            if len(self._val) == 1
+            else self._val
+        )
 
     @property
     def type(self) -> str:

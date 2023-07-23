@@ -5,12 +5,13 @@ import pprint
 
 import pytest
 
+from typing import Callable
 
 current_folder = pathlib.Path(__file__).parent
 
 
 @pytest.fixture(scope="session")
-def curr_logger() -> None:
+def curr_logger() -> logging.Logger:
     work_dir = pathlib.Path(os.getenv("TOX_WORK_DIR", current_folder))
     current_tox_env = os.getenv("TOX_ENV_NAME", "")
     file_logger = logging.FileHandler(
@@ -32,18 +33,18 @@ def curr_logger() -> None:
 
 
 @pytest.fixture(scope="session")
-def text_to_parse() -> None:
+def text_to_parse() -> str:
     with open(current_folder / "text_to_parse.txt") as orig_text:
         return orig_text.read()
 
 
 @pytest.fixture(scope="session")
-def complex_token_dict() -> None:
+def complex_token_dict() -> dict[str, str]:
     return {"first_var": "10", "second_var": "TESTING"}
 
 
 @pytest.fixture(scope="session")
-def tuple_rules() -> None:
+def tuple_rules() -> tuple[tuple[str, str], ...]:
     return (
         ("VARIABLE", r"(?P<var_name>[a-z_]+):(?P<var_type>[A-Z]\w+)"),
         ("NAMESPACE", r"namespace:(?P<namespace>[a-z]+)"),
@@ -56,12 +57,12 @@ def tuple_rules() -> None:
 
 
 @pytest.fixture(scope="session")
-def dict_rules(tuple_rules) -> None:
+def dict_rules(tuple_rules) -> dict[str, str]:
     return dict(tuple_rules)
 
 
 @pytest.fixture(scope="session")
-def debug_log_code(curr_logger) -> None:
+def debug_log_code(curr_logger) -> Callable[[str], None]:
     def inner_debug_log_code(text_to_parse):
         pp = pprint.PrettyPrinter(width=100)
 

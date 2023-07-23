@@ -1,8 +1,7 @@
 import re
-import typing
 from typing import Dict, Iterator, Mapping, Set
 
-from . import MatchPattern, token
+from . import token
 from .errors import LexerError
 
 
@@ -47,7 +46,7 @@ class Lexer:
         self._skip_whitespace = skip_whitespace
         self.text_buffer = text_buffer
 
-        # inicialize variables that will be used
+        # initialize variables that will be used
         self._pattern_id = 0
         self._re_ws_skip = re.compile(r"\S")
         self._regex_parts: Set[str] = set()
@@ -66,36 +65,28 @@ class Lexer:
         return self.get_char_at_current_pointer()
 
     # Text buffer property
-    def get_text_buffer(self) -> str:
+    @property
+    def text_buffer(self) -> str:
         """
         Get the current text to be parsed into the lexer
         """
         return self._text_buffer
 
-    def set_text_buffer(self, value: str) -> None:
+    @text_buffer.setter
+    def text_buffer(self, value: str) -> None:
         """
         Set the text to be parsed into the lexer and set the pointer back to 0
         """
         self._text_buffer_pointer = 0
         self._text_buffer = value
 
-    def clear_text_buffer(self) -> None:
+    @text_buffer.deleter
+    def text_buffer(self) -> None:
         """
         Set the text buffer to a blank string and set the text pointer to 0
         """
         self._text_buffer_pointer = 0
         self._text_buffer = ""
-
-    text_buffer: str = typing.cast(
-        str,
-        property(
-            get_text_buffer,
-            set_text_buffer,
-            clear_text_buffer,
-            "Set, Get or Clear the text buffer, you may use :keyword:`del` "
-            "with this property to clear the text buffer",
-        )
-    )
 
     def get_char_at_current_pointer(self) -> str:
         return self.get_char_at(self._text_buffer_pointer)
@@ -129,20 +120,16 @@ class Lexer:
         """
         while self._text_buffer_pointer < len(self.text_buffer):
             if skip_whitespace or self._skip_whitespace:
-                regex_match = self._re_ws_skip.search(
+                if regex_match := self._re_ws_skip.search(
                     self.text_buffer, self._text_buffer_pointer
-                )
-
-                if regex_match:
+                ):
                     self._text_buffer_pointer = regex_match.start()
                 else:
                     break
 
-            regex_match = self._lexer_pattern.match(
+            if regex_match := self._lexer_pattern.match(
                 self.text_buffer, self._text_buffer_pointer
-            )
-
-            if regex_match:
+            ):
                 yield self._generate_token_from_match(regex_match)
             else:
                 # if we're here, no rule matched
@@ -155,15 +142,15 @@ class Lexer:
         self._finished_token_generation = True
 
     def _generate_token_from_match(
-        self, regex_match: MatchPattern
+        self, regex_match: re.Match[str]
     ) -> token.Token:
-        token_vars = {}
         all_groups = regex_match.groupdict().items()
 
-        for curr_group, curr_value in all_groups:
-            if curr_value:
-                token_vars[curr_group] = curr_value
-
+        token_vars = {
+            curr_group: curr_value
+            for curr_group, curr_value in all_groups
+            if curr_value
+        }
         token_name = self._group_type[str(regex_match.lastgroup)]
 
         created_token = token.Token(
