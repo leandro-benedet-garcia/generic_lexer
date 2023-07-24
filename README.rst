@@ -22,7 +22,7 @@ generic_lexer
    :target: https://codeclimate.com/github/Cerberus1746/generic_lexer
    :alt: Code Climate Graduation
 
-The minimun python version is 3.6.1
+The minimun python version is 3.8
 
 :Original Author:
    Eli Bendersky <eliben@gmail.com> with
