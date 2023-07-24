@@ -10,7 +10,7 @@ generic_lexer
    :target: https://github.com/psf/black
    :alt: Code style: Black
 
-.. image:: https://img.shields.io/github/workflow/status/leandro-benedet-garcia/generic_lexer/Tox%20Testing%20Suite
+.. image:: https://img.shields.io/github/actions/workflow/status/leandro-benedet-garcia/generic_lexer/tox-suite.yml?branch=master
    :target: https://github.com/leandro-benedet-garcia/generic_lexer/actions?query=workflow%3A%22Tox+Testing+Suite%22
    :alt: GitHub Workflow Status
 
@@ -22,7 +22,7 @@ generic_lexer
    :target: https://codeclimate.com/github/Cerberus1746/generic_lexer
    :alt: Code Climate Graduation
 
-The minimun python version is 3.8
+The minimun python version is 3.9
 
 :Original Author:
    Eli Bendersky <eliben@gmail.com> with
