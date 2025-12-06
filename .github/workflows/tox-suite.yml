@@ -54,7 +54,7 @@ jobs:
           pip install tox tox-gh-actions
           tox
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: coverage-data
           path: .coverage/
